@@ -35,7 +35,7 @@ public class Customers {
             c.updateCustomer();
             break;
         case 4:
-             c.deleteCustomer();
+            c.deleteCustomer();
             break;
         case 5:
             break;
@@ -135,15 +135,15 @@ public class Customers {
 
     public void deleteCustomer() {
 
-        Connection conn=new DBConnection().connect();
-        PreparedStatement stmt=null;
+        Connection conn = new DBConnection().connect();
+        PreparedStatement stmt = null;
 
         System.out.println("Enter Customer ID:");
         int cid = sc.nextInt();
 
         String query = "delete from vehicle_mgmt.customers where cid=?";
         try {
-            
+
             stmt = conn.prepareStatement(query);
 
             stmt.setInt(1, cid);
@@ -151,8 +151,7 @@ public class Customers {
             int rowAffected = stmt.executeUpdate();
             if (rowAffected > 0) {
                 System.out.println("Deleted");
-            }
-            else{
+            } else {
                 System.out.println("Couldn't delete");
             }
         } catch (Exception e) {
