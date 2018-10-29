@@ -105,16 +105,18 @@ public class ComplexQueries {
         String ttype = scc.next();
         if (conn != null) {
             try {
-                String query = "select count(model_name) as cnt, model_name from vehicle_mgmt.vehicle_types natural join vehicle_mgmt.vehicle_models natural join vehicle_mgmt.vehicles natural join vehicle_mgmt.services where type_name=? group by model_name having count(model_id)<3 order by cnt";
+                String query = 
+                "select vm.model_name,t2.average_cost as maintance_cost from vehicle_mgmt.vehicle_models as vm join (select (t1.smc/t1.nvr)::integer as average_cost,t1.mid as model_id,t1.nvr as no_of_v from (select sum(eg.no_of_vehicles_registered) as nvr,sum(eg.no_of_time_it_requires_service) as nrs ,sum(eg.sum_of_maintance_cost) as smc,eg.model_id as mid from (select count(df.vid) as no_of_vehicles_registered,df.c2 as no_of_time_it_requires_service,df.c3 as sum_of_maintance_cost,df.mid as model_id from (select vv.vehicle_id as vid,(select count(*) from vehicle_mgmt.services as ss where ss.vehicle_id=vv.vehicle_id)as c2, (select sum(pp.amount) from vehicle_mgmt.payments as pp join vehicle_mgmt.services as ss on ss.pay_id=pp.pay_id where ss.vehicle_id=vv.vehicle_id) as c3, vm.model_id as mid from vehicle_mgmt.vehicles as vv join vehicle_mgmt.vehicle_models as vm on vv.model_id=vm.model_id join vehicle_mgmt.vehicle_types as vt on vm.type_id=vt.type_id where vt.type_name=?) as df group by mid,df.c2,df.c3) as eg group by eg.model_id) as t1)as t2 on t2.model_id=vm.model_id order by  case when t2.average_cost is null then 0 else 0 end,maintance_cost desc nulls first LIMIT 5";
                 stmt = conn.prepareStatement(query);
                 stmt.setString(1, ttype);
                 ResultSet rs = stmt.executeQuery();
 
-                System.out.println("Model Name");
+                System.out.println("Model Name"+"||"+"Maintanence Cost");
                 System.out.println("-----------");
                 while (rs.next()) {
                     String model_name = rs.getString("model_name");
-                    System.out.println(model_name);
+                    int average_cost=rs.getInt("maintance_cost");
+                    System.out.println(model_name + "||" + average_cost);
                 }
                 stmt.close();
             } catch (Exception e) {
