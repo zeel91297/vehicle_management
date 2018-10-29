@@ -91,10 +91,10 @@ public class mainApp {
         ComplexQueries c = new ComplexQueries();
         System.out.println(
                 "----------------------------------------------------------------------------------------------");
-        System.out.println("\n 1. List all staff name who had serviced all vehicles");
+        System.out.println("\n 1. List all staff name who had serviced all vehicles of particular model");
         System.out.println("\n 2. List all the customers who had given feedback for all services.");
         System.out.println(
-                "\n 3. Retrieve which vehicle modal requires least maintainance than other vehicle modals for particular vehicle type.");
+                "\n 3. Retrieve which vehicle modal requires least maintainance than other vehicle modals for particular vehicle type with proof.");
         System.out.println(
                 "\n 4. Retrieve top 5 staff details who had maximum ratings in their service feedback for particular vehicle type.");
         System.out.println("\n 5. Retrieve vehicle types who required maximum service");
